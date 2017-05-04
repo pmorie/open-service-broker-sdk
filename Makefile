@@ -136,12 +136,6 @@ $(BINDIR)/informer-gen: .init
 	# generate all pkg/client contents
 	$(BUILD_DIR)/update-client-gen.sh
 
-# Some prereq stuff
-###################
-.init: glide.yaml
-	glide install --strip-vendor --strip-vcs --update-vendored
-	touch $@
-
 # Util targets
 ##############
 .PHONY: verify verify-client-gen 
@@ -188,14 +182,11 @@ test-unit: .init build
 	go test $(UNIT_TEST_FLAGS) \
 	  $(addprefix $(BROKER_PKG)/,$(TEST_DIRS))
 
-clean: clean-bin clean-deps
+clean: clean-bin
 
 clean-bin:
 	rm -rf $(BINDIR)
 	rm -f .generate_exes
-
-clean-deps:
-	rm -f .init
 
 # Building Docker Images for our executables
 ############################################
